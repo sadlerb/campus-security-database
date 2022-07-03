@@ -4,7 +4,12 @@ const config = require('./app/config/db.config')
 
 
 // Create connection 
-const db = mysql.createConnection(config.databaseOptions);
+const db = mysql.createConnection({
+    host:config.HOST,
+    user:config.USER,
+    password:config.PASSWORD,
+    database:config.DB
+});
 
 //Connect to MySql 
 db.connect(err => {
@@ -57,6 +62,6 @@ app.get('/users',(req,res)=>{
     console.log(res)
 })
 
-app.listen(config.port.PORT,() =>{
-    console.log("Server started on port 3000")
+app.listen(config.PORT,() =>{
+    console.log("Server started on port " + config.PORT)
 })
