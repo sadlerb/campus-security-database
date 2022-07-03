@@ -57,6 +57,6 @@ app.get('/users',(req,res)=>{
     console.log(res)
 })
 
-app.listen('3000',() =>{
+app.listen(config.port.PORT,() =>{
     console.log("Server started on port 3000")
 })
