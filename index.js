@@ -1,68 +1,30 @@
-const express = require('express')
-const mysql = require('mysql')
-const config = require('./app/config/db.config')
+const express = require("express");
+// const bodyParser = require("body-parser"); /* deprecated */
+const cors = require("cors");
 
+const app = express();
 
-// Create connection 
-var db = mysql.createPool({
-    host: config.HOST,
-    user: config.USER,
-    password: config.PASSWORD,
-    database: config.DB
-  });
+var corsOptions = {
+  origin: "http://localhost:8081"
+};
 
+app.use(cors(corsOptions));
 
-//Connect to MySql 
-db.connect(err => {
-    if (err){
-        throw err
-    }
-    console.log("MySQL Connected")
-})
+// parse requests of content-type - application/json
+app.use(express.json()); /* bodyParser.json() is deprecated */
 
-const app = express()
+// parse requests of content-type - application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true })); /* bodyParser.urlencoded() is deprecated */
 
-// Create Database 
-app.get('/createdb',(req,res) =>{
-   const sql = "CREATE DATABASE campus_security_database"
-   db.query(sql,err =>{
-    if (err){
-        throw err
-    }
-    res.send('Database Created')
-   })
-})
+// simple route
+app.get("/", (req, res) => {
+  res.json({ message: "Welcome to bezkoder application." });
+});
 
-app.get('/createTable',(req,res)=>{
-    const sql = "CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255), address VARCHAR(255))";
-    db.query(sql,err =>{
-        if (err){
-            throw err
-        }
-        res.send("User table created")
-    })
-})
+require("./app/routes/tutorial.routes.js")(app);
 
-app.get('/insert',(req,res)=>{
-    const sql = "INSERT INTO users (name, address) VALUES ('B', 'A')";
-    db.query(sql,err =>{
-        if (err){
-            throw err
-        }
-        res.send("User Inserted")
-    })
-})
-
-app.get('/users',(req,res)=>{
-    const sql = "SELECT * from users"
-    db.query(sql,err =>{
-        if (err){
-            throw err
-        }
-    })
-    console.log(res)
-})
-
-app.listen(config.PORT,() =>{
-    console.log("Server started on port " + config.PORT)
-})
+// set port, listen for requests
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}.`);
+});
