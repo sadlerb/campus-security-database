@@ -4,13 +4,13 @@ const config = require('./app/config/db.config')
 
 
 // Create connection 
-var connection = mysql.createPool({
+var db = mysql.createPool({
     host: config.HOST,
     user: config.USER,
     password: config.PASSWORD,
     database: config.DB
   });
-  module.exports = connection;
+
 
 //Connect to MySql 
 db.connect(err => {
