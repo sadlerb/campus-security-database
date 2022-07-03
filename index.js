@@ -1,14 +1,10 @@
 const express = require('express')
 const mysql = require('mysql')
+const config = require('./app/config/db.config')
 
 
 // Create connection 
-const db = mysql.createConnection({
-    host:'localhost',
-    user:'root',
-    password:'',
-    database:'campus_security_database'
-});
+const db = mysql.createConnection(config.databaseOptions);
 
 //Connect to MySql 
 db.connect(err => {
@@ -49,6 +45,16 @@ app.get('/insert',(req,res)=>{
         }
         res.send("User Inserted")
     })
+})
+
+app.get('/users',(req,res)=>{
+    const sql = "SELECT * from users"
+    db.query(sql,err =>{
+        if (err){
+            throw err
+        }
+    })
+    console.log(res)
 })
 
 app.listen('3000',() =>{
