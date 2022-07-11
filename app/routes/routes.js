@@ -12,10 +12,16 @@ module.exports = function(app){
   app.get('/api/users',usersService.getAllUsers)
   // get a single user
   app.get('/api/users/:id',usersService.getOneUser)
+    // get user location
+  app.get('/api/users/:id/location',usersService.getUserLocation)
   // add a new user
   app.post('/api/users',usersService.create)
+  // add location to user
+  app.post('/api/users/:id/location',usersService.addLocationToUser)
+
   //delete user
   app.delete("/api/users/:id",usersService.delete)
+  
 
 
 // Hotzone Routes
