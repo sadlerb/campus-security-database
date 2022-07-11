@@ -16,7 +16,7 @@ exports.addLocationToUser = (req,res) =>{
 
 exports.getUserLocation = (req,res) =>{
     const user_id = req.params.id
-    const query = `SELECT * FROM users INNER JOIN location ON location.entity_id = users.user_id WHERE location.entity_id = ${user_id}`
+    const query = `SELECT * FROM users INNER JOIN location ON location.entity_id = users.user_id WHERE location.entity_id = ${user_id} AND location.entity_type = 'U'`
     pool.query(query,(err,results)=>{
         if (err){
             res.json(err)
@@ -57,8 +57,8 @@ exports.getOneUser = (req,res) =>{
 }
 
 exports.create = (req,res) =>{
-    const {fname,lname,phone,status} = req.body
-    const query = `INSERT INTO users (user_fname,user_lname,user_phone_number,user_status) VALUES ("${fname}","${lname}","${phone}","${status}")`
+    const {fname,lname,phone} = req.body
+    const query = `INSERT INTO users (user_fname,user_lname,user_phone_number,user_status) VALUES ("${fname}","${lname}","${phone}","S")`
     pool.query(query,(err)=>{
         if (err){
             res.json(err)
