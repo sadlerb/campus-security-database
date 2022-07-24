@@ -34,8 +34,8 @@ exports.getHotzone = (req,res) => {
 }
 // create
 exports.createHotzone = (req,res) => {
-    const {severity_rating,size,location} = req.body
-    const query = `INSERT INTO hotzones (severity_rating,size,location) VALUES (${severity_rating},${size},${location})`
+    const {severity_rating,size} = req.body
+    const query = `INSERT INTO hotzones (severity_rating,size) VALUES (${severity_rating},${size}})`
     pool.query(query,(err) => {
         if (err){
             res.json(err)
@@ -45,6 +45,20 @@ exports.createHotzone = (req,res) => {
         res.json({"message":"hotzone sucessfully added"})
     })
 
+}
+
+exports.setHotzoneLocation = (req,res) => {
+    const hotzone_id = req.params.id
+    const {lattitude,longitude} = req.body
+    const query = `CALL setHotzoneLocation(${hotzone_id},${lattitude},${longitude})`
+    pool.query = (query,(err) => {
+        if (err){
+            res.json(err)
+            return
+        }
+        res.status(200)
+        res.json({"message":"hotzone sucessfully added"})
+    })
 }
 
 // delete 

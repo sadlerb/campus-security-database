@@ -15,6 +15,8 @@ module.exports = function(app){
     // get user location
   app.get('/api/users/:id/location',usersService.getUserLocation)
   // add a new user
+  app.get('/api/auth/validate',usersService.validateUser)
+
   app.post('/api/users',usersService.create)
   // add location to user
   app.post('/api/users/:id/location',usersService.addLocationToUser)
