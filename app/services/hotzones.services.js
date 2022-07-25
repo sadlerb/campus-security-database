@@ -49,8 +49,8 @@ exports.createHotzone = (req,res) => {
 
 exports.setHotzoneLocation = (req,res) => {
     const hotzone_id = req.params.id
-    const {lattitude,longitude} = req.body
-    const query = `CALL setHotzoneLocation(${hotzone_id},${lattitude},${longitude})`
+    const {latitude,longitude} = req.body
+    const query = `CALL setHotzoneLocation(${hotzone_id},${latitude},${longitude})`
     pool.query = (query,(err) => {
         if (err){
             res.json(err)
