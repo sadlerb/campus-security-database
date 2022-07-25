@@ -60,3 +60,22 @@ exports.rejectRequest = (req,res) => {
     })
     
 }
+
+exports.getAllFriends = (req,res) =>{
+    const userID = req.params.id
+    const query = `SELECT users.user_id,users.user_fname,users.user_lname from users LEFT JOIN requests ON users.user_id = requests.toUserID WHERE requests.toUserID = ${userID} AND requests.status = 'A'`
+    pool.query(query,(err,results)=>{
+        if (err){
+            res.json(err)
+            return
+        }
+        if (!results.length){
+            res.status(404)
+            res.json({"message":"user has no friend requests"})
+            return
+        }
+
+        res.status(200)
+        res.json(results)
+    })
+}

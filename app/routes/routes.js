@@ -44,6 +44,7 @@ module.exports = function(app){
 // Friend Requests
 app.post('/api/request',friendReqestService.sendRequest)
 app.get('/api/request/:id',friendReqestService.getAllRequests)
+app.get('/api/request/:id/friends',friendReqestService.getAllFriends)
 app.put('/api/request/accept',friendReqestService.acceptRequest)
 app.put('/api/request/reject',friendReqestService.rejectRequest)
 }   
