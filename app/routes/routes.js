@@ -3,6 +3,7 @@ module.exports = function(app){
     const hotzonesService = require ('../services/hotzones.services')
     const incidentService = require ('../services/incident.services')
     const friendReqestService = require('../services/friendRequest.services')
+    const authServices = require('../services/auth/user.auth')
 
     app.get("/", (req, res) => {
     res.json({ message: "Connected to campus security database" });
@@ -16,7 +17,6 @@ module.exports = function(app){
     // get user location
   app.get('/api/users/:id/location',usersService.getUserLocation)
   // add a new user
-  app.get('/api/auth/validate',usersService.validateUser)
 
   app.post('/api/users',usersService.create)
   // add location to user
@@ -47,4 +47,7 @@ app.get('/api/request/:id',friendReqestService.getAllRequests)
 app.get('/api/request/:id/friends',friendReqestService.getAllFriends)
 app.put('/api/request/accept',friendReqestService.acceptRequest)
 app.put('/api/request/reject',friendReqestService.rejectRequest)
+
+//Auth Routes
+app.get('/api/auth/validate',authServices.validateUser)
 }   

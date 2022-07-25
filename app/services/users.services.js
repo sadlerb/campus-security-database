@@ -1,4 +1,6 @@
 const pool = require('../services/db')
+const auth  = require("./auth/auth")
+
 
 exports.addLocationToUser = (req,res) =>{
     const entity_id = req.params.id
@@ -36,27 +38,6 @@ exports.getAllUsers = (req,res) =>{
     })
 }
 
-exports.validateUser = (req,res) => {
-    const {user_id,password} = req.body
-    const query = `SELECT * FROM users WHERE user_id = ${user_id} AND user_password = "${password}"`
-    pool.query(query,(err,results) =>{
-        if (err){
-            res.json(err)
-            return 
-        }
-
-        if (!results.length){
-            res.status(400)
-            res.json({"message":"Incorrect username or password"})
-            return
-        }
-
-        else{
-            res.status(200)
-            res.json({"message":"User Validation Successful"})
-        }
-    })
-}
 
 
 exports.getOneUser = (req,res) =>{
@@ -80,7 +61,9 @@ exports.getOneUser = (req,res) =>{
 
 exports.create = (req,res) =>{
     const {user_id,fname,lname,password} = req.body
-    const query = `INSERT INTO users (user_id,password,user_fname,user_lname,user_status) VALUES ("${user_id},"${password}",${fname}","${lname}","S")`
+    const {hash,salt} = auth.encryptPassword(password)
+    const saltedHash = hash+"+"+salt
+    const query = `INSERT INTO users (user_id,user_password,user_fname,user_lname,user_status) VALUES ('${user_id}','${saltedHash}','${fname}','${lname}','S')`
     pool.query(query,(err)=>{
         if (err){
             res.json(err)
@@ -104,3 +87,4 @@ exports.delete = (req,res) => {
 
 
 }
+
