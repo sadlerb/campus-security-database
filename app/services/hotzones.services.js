@@ -51,9 +51,8 @@ exports.setHotzoneLocation = (req,res) => {
     const hotzone_id = req.params.id
     const {latitude,longitude} = req.body
     const query = `CALL setHotzoneLocation(${hotzone_id},${latitude},${longitude})`
-    console.log("BEFORE START")
-    pool.query = (query,(err) => {
-        console.log("QUERY START")
+    pool.query(query,(err) => {
+        
         if (err){
             console.log(err)
             res.json(err)
@@ -62,14 +61,14 @@ exports.setHotzoneLocation = (req,res) => {
         
         res.status(200)
         res.json({"message":"hotzone location added"})
-        return
+        
     })
 }
 
 // delete 
 exports.deleteHotzone = (req,res) => {
     const query = `DELETE FROM hotzones WHERE hotzone_id ${req.params.id}`
-    pool.query(query,(err,results) => {
+    pool.query(query,(err) => {
         if (err){
             res.json(err)
             return

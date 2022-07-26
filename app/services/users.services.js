@@ -4,8 +4,8 @@ const auth  = require("./auth/auth")
 
 exports.addLocationToUser = (req,res) =>{
     const entity_id = req.params.id
-    const {lattitude,longitude} = req.body
-    const query = `CALL setUserLocation(${entity_id},${lattitude},${longitude})`
+    const {latitude,longitude} = req.body
+    const query = `CALL setUserLocation(${entity_id},${latitude},${longitude})`
     pool.query(query,(err)=>{
         if (err){
             res.json(err)
