@@ -35,7 +35,7 @@ exports.getHotzone = (req,res) => {
 // create
 exports.createHotzone = (req,res) => {
     const {severity_rating,size} = req.body
-    const query = `INSERT INTO hotzones (severity_rating,size) VALUES (${severity_rating},${size})`
+    const query = `INSERT INTO hotzones (weight) VALUES (${severity_rating},${size})`
     pool.query(query,(err) => {
         if (err){
             res.json(err)
