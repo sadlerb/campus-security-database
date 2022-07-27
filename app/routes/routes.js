@@ -4,6 +4,7 @@ module.exports = function(app){
     const incidentService = require ('../services/incident.services')
     const friendReqestService = require('../services/friendRequest.services')
     const authServices = require('../services/auth/user.auth')
+    const destinationServices = require("../services/destinationServices")
 
     app.get("/", (req, res) => {
     res.json({ message: "Connected to campus security database" });
@@ -50,4 +51,8 @@ app.put('/api/request/reject',friendReqestService.rejectRequest)
 
 //Auth Routes
 app.get('/api/auth/validate',authServices.validateUser)
+
+
+//Destination Routes
+app.get('/api/destinations',destinationServices.getAllDestinations)
 }   
