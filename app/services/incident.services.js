@@ -3,7 +3,7 @@ const pool = require('../services/db')
 
 
 exports.getIncidents = (req,res) =>{
-    const query = "SELECT * from incidents"
+    const query = "CALL getAllIncidentDetails()"
     pool.query(query,(err,results)=>{
         if (err) res.json(err)
         res.status(200)
@@ -31,15 +31,17 @@ exports.getOneIncident = (req,res) => {
 }
 
 exports.createIncident = (req,res) => {
-    const {time,severity,report_details} = req.body
-    const query = `INSERT INTO incidents (time,severity,report_details) VALUES ('${time}',${severity},'${report_details}')`
+    const {location,severity,date,report_details} = req.body
+    const {latitude,longitude} = location
+
+    const query = `CALL addIncident(${latitude},${longitude},${severity},'${date}','${report_details}')`
     pool.query(query,(err) => {
         if (err){
             res.json(err)
             return
         }
-
         res.status(200)
         res.json({"message": "incident successfuly created"})
     })
 }
+
