@@ -4,10 +4,3 @@ module.exports = {
     PASSWORD: "5519d6e4",
     DB: "heroku_d7a7ceb951aadcd",
   };
-
-/*   module.exports = {
-    HOST: "localhost",
-    USER: "capstone",
-    PASSWORD: "capstone",
-    DB: "capstonedb",
-  }; */
