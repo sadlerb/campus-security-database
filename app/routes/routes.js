@@ -4,12 +4,7 @@ module.exports = function(app){
     const incidentService = require ('../services/incident.services')
     const friendReqestService = require('../services/friendRequest.services')
     const authServices = require('../services/auth/user.auth')
-<<<<<<< HEAD
-    const routeService = require('../services/generateRoute.services')
-=======
     const destinationServices = require("../services/destinationServices")
-
->>>>>>> 28770c014ed9ebd77559e3b7780622049ad88ae1
     app.get("/", (req, res) => {
     res.json({ message: "Connected to campus security database" });
   });
@@ -30,8 +25,6 @@ module.exports = function(app){
   //delete user
   app.delete("/api/users/:id",usersService.delete)
   
-// Generate Route Routes
-  app.get('/api/route',routeService.getRoute)
 
 // Hotzone Routes
   app.get('/api/hotzones',hotzonesService.getAllHotzones)
@@ -60,5 +53,5 @@ app.get('/api/auth/validate',authServices.validateUser)
 
 //Destination Routes
 app.get('/api/destinations',destinationServices.getAllDestinations)
-app.get('/api/destinations/children',destinationServices.getAllDestinationsWithChildren)
+app.get('/api/destinations/children',destinationServices.generateRoute)
 }   
