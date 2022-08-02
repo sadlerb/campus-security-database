@@ -34,6 +34,8 @@ exports.createIncident = (req,res) => {
     const {location,severity,date,report_details} = req.body
     const {latitude,longitude} = location
 
+    
+
     const query = `CALL addIncident(${latitude},${longitude},${severity},'${date}','${report_details}')`
     pool.query(query,(err) => {
         if (err){
