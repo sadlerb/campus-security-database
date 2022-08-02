@@ -4,7 +4,12 @@ module.exports = function(app){
     const incidentService = require ('../services/incident.services')
     const friendReqestService = require('../services/friendRequest.services')
     const authServices = require('../services/auth/user.auth')
+<<<<<<< HEAD
     const routeService = require('../services/generateRoute.services')
+=======
+    const destinationServices = require("../services/destinationServices")
+
+>>>>>>> 28770c014ed9ebd77559e3b7780622049ad88ae1
     app.get("/", (req, res) => {
     res.json({ message: "Connected to campus security database" });
   });
@@ -51,4 +56,9 @@ app.put('/api/request/reject',friendReqestService.rejectRequest)
 
 //Auth Routes
 app.get('/api/auth/validate',authServices.validateUser)
+
+
+//Destination Routes
+app.get('/api/destinations',destinationServices.getAllDestinations)
+app.get('/api/destinations/children',destinationServices.getAllDestinationsWithChildren)
 }   
