@@ -142,15 +142,20 @@ exports.getAllDestinationsWithChildren = (req,res) => {
                 }
                 count+=1
                 if (count == results.length) {
-                    //console.log(pathGraph)
-                    /* query = ""//want to call the heuristics part here set them all to zero in the db initially
-
-                    here just add the heurist key to the pathgrapgh variable. The value for that key would be in the form of an object.
-                    {
-                        name: val 
-                    }*/
-                    res.status(200)
-                    res.json(getRoute(pathGraph, req))
+                    const query = "CALL getDestinationHeuristics()";
+                    pool.query(query,(err,results) =>{
+                        var heurist = {}
+                        results[0].forEach((val)=>{
+                            heurist[val['name']] = val['heuristics']    
+                            
+                        })
+                        pathGraph['heuristics'] = heurist
+                        console.log(pathGraph)
+                        res.status(200)
+                        res.json(getRoute(pathGraph, req))
+                    })
+                    
+ 
                 }
             });
         });          
