@@ -4,7 +4,7 @@ module.exports = function(app){
     const incidentService = require ('../services/incident.services')
     const friendReqestService = require('../services/friendRequest.services')
     const authServices = require('../services/auth/user.auth')
-
+    const routeService = require('../services/generateRoute.services')
     app.get("/", (req, res) => {
     res.json({ message: "Connected to campus security database" });
   });
@@ -25,7 +25,8 @@ module.exports = function(app){
   //delete user
   app.delete("/api/users/:id",usersService.delete)
   
-
+// Generate Route Routes
+  app.get('/api/route',routeService.getRoute)
 
 // Hotzone Routes
   app.get('/api/hotzones',hotzonesService.getAllHotzones)
