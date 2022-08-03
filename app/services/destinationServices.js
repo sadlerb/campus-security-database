@@ -40,10 +40,10 @@ class PriorityQueue {
     path(start, current) {
         let path = []
         while (current.label != start.label) {
-            path.splice(0, 0, {"name": current.label, "location": current.location})
+            path.splice(0, 0, current.location)
             current = current.parent
         }
-        path.splice(0, 0, {"name": start.label, "location": start.location})
+        path.splice(0, 0, start.location)
         //console.log(path)
         return path
     }
