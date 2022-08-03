@@ -1,6 +1,5 @@
 
 const pool = require('../services/db')
-const pathGraph = new Object()
 const geolib = require ('geolib')
 class PriorityQueue {
     queue;
@@ -159,6 +158,6 @@ exports.getAllDestinationsWithChildren = (req,res) => {
             });          
     })} else {
         res.status(200)
-        res.json(getRoute(pathGraph, req))
+        res.json(getRoute(pathGraph, req))   
     }
 };

@@ -71,5 +71,6 @@ function addIncident(latitude,longitude,severity,date,report_details,heuristic){
             });// end foreach 
         });// end get destination details
     });// end add incident 
+    pathGraph = new Object()
 };//end function
 

@@ -3,7 +3,7 @@ const app = express();
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
-
+global.pathGraph = new Object();
 
 require ('./app/routes/routes.js') (app);
 // Listen on port
