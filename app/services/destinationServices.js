@@ -96,9 +96,9 @@ getRoute =(pathGraph, req)=> {
                 }
                 cost = temp.g
                 temp.g = current.g + temp.g
-                temp.f = /* pathGraph.heurist[temp.label] */ +  current.g + cost
+                temp.f = pathGraph.heuristics[temp.label] +  current.g + cost
                 fringe.enqueue(temp)
-                //current.g += pathGraph.heurist[temp.label]
+                current.g += pathGraph.heuristics[temp.label]
             })
             
         }

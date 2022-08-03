@@ -1,6 +1,5 @@
 const pool = require('../services/db')
 const geolib = require ('geolib')
-const { forEach } = require('async')
 
 
 exports.getIncidents = (req,res) =>{
@@ -68,13 +67,9 @@ function addIncident(latitude,longitude,severity,date,report_details,heuristic){
                     pool.query(query,(err)=>{
                         if (err) throw err
                     });
-                };
-                
-            });
-        });
-
-    });
-    
-     
-};
+                };//end if
+            });// end foreach 
+        });// end get destination details
+    });// end add incident 
+};//end function
 
