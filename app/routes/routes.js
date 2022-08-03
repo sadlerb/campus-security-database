@@ -53,5 +53,5 @@ app.get('/api/auth/validate',authServices.validateUser)
 
 //Destination Routes
 app.get('/api/destinations',destinationServices.getAllDestinations)
-app.get('/api/destinations/children',destinationServices.getAllDestinationsWithChildren)
+app.post('/api/destinations/children',destinationServices.getAllDestinationsWithChildren)
 }   
