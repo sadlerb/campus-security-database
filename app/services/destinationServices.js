@@ -73,6 +73,7 @@ class Node {
 
 getRoute =(pathGraph, req)=> {
     const locations = req.body
+    console.log(locations);
     let x = geolib.findNearest({"latitude": locations.start.latitude, "longitude": locations.start.longitude}, Object.values(pathGraph))
     let fringe = new PriorityQueue()
     let startNode = new Node(Object.keys(pathGraph).find(key => pathGraph[key] === x) , null, {"latitude": locations.start.latitude, "longitude": locations.start.longitude})
@@ -117,7 +118,7 @@ exports.getAllDestinations=(req,res) => {
 }
 
 exports.getAllDestinationsWithChildren = (req,res) => {
-    //console.log(pathGraph);
+    console.log(req);
     if (Object.entries(pathGraph).length == 0) {
         const query = "CALL getAllDestinationDetails()"
         pool.query(query,(err,results)=>{
