@@ -48,7 +48,7 @@ app.put('/api/request/accept',friendReqestService.acceptRequest)
 app.put('/api/request/reject',friendReqestService.rejectRequest)
 
 //Auth Routes
-app.get('/api/auth/validate',authServices.validateUser)
+app.post('/api/auth/validate',authServices.validateUser)
 
 
 //Destination Routes

@@ -122,7 +122,6 @@ function updateHotzones() {
             const weight = (((avg - 0) / (100 - 0)) * (10 - 0) + 0) * 10
 
             const query = `CALL addHotzone (${center.latitude}.${center.longitude},${weight})`
-            console.log(query)
             pool.query(query,(err)=>{
                 if (err) throw err;
             })
