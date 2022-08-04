@@ -86,17 +86,18 @@ getRoute =(pathGraph, req)=> {
         if (current.label == goalNode.label){
             return(fringe.path(startNode, current))
         } else {
+            console.log(current);
             fringe.getChildren(pathGraph, current.label).forEach((i)=>{
                 let temp = new Node(i[0], current, i[1])
                 temp.g = i[1].distance
-                if (!(temp.label in visited)){
+                if (!visited.includes(temp.label)){
                     visited.push(temp.label)
+                    cost = temp.g
+                    temp.g = current.g + temp.g
+                    temp.f = pathGraph.heuristics[temp.label] +  current.g + cost
+                    fringe.enqueue(temp)
+                    current.g += pathGraph.heuristics[temp.label]
                 }
-                cost = temp.g
-                temp.g = current.g + temp.g
-                temp.f = pathGraph.heuristics[temp.label] +  current.g + cost
-                fringe.enqueue(temp)
-                current.g += pathGraph.heuristics[temp.label]
             })
             
         }
@@ -116,8 +117,6 @@ exports.getAllDestinations=(req,res) => {
 }
 
 exports.getAllDestinationsWithChildren = (req,res) => {
-    //console.log(pathGraph);
-    if (Object.entries(pathGraph).length == 0) {
         const query = "CALL getAllDestinationDetails()"
         pool.query(query,(err,results)=>{
             if (err){
@@ -148,16 +147,12 @@ exports.getAllDestinationsWithChildren = (req,res) => {
                                 
                             })
                             pathGraph['heuristics'] = heurist
+                            //console.log(pathGraph);
                             res.status(200)
                             res.json(getRoute(pathGraph, req))
                         })
-                        
-    
                     }
                 });
             });          
-    })} else {
-        res.status(200)
-        res.json(getRoute(pathGraph, req))   
-    }
+    })
 };
