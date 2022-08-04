@@ -107,6 +107,7 @@ function updateHotzones() {
                 points.push(temp)
             }
         });
+
         points.forEach((coordinates)=>{
             var locations = []
             var severity_list =  []
@@ -117,10 +118,11 @@ function updateHotzones() {
 
             })
             const center = geolib.getCenter(locations)
-            const sum = severity_list.reduce((partialSum, a) => partialSum + a, 0);
-            const weight = ((sum/severity_list.length) /10)
+            const avg = severity_list.reduce((partialSum, a) => partialSum + a, 0)/severity_list.length;
+            const weight = (((avg - 0) / (100 - 0)) * (10 - 0) + 0) * 10
 
             const query = `CALL addHotzone (${center.latitude}.${center.longitude},${weight})`
+            console.log(query)
             pool.query(query,(err)=>{
                 if (err) throw err;
             })
