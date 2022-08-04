@@ -49,7 +49,7 @@ exports.update = (req,res) => {
 }
 
 function addIncident(latitude,longitude,severity,date,report_details,heuristic){
-    const max_distance = 100 // Max distance where the incident will affect the heuristics of destination 
+    const max_distance = 200 // Max distance where the incident will affect the heuristics of destination 
     const query = `CALL addIncident(${latitude},${longitude},${severity},'${date}','${report_details}')`
     pool.query(query,(err) => {
         if (err){
@@ -79,6 +79,7 @@ function addIncident(latitude,longitude,severity,date,report_details,heuristic){
             });// end foreach 
         });// end get destination details
     });// end add incident 
+    pathGraph = new Object()
 };//end function
 
 function updateHotzones() {

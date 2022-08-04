@@ -1,6 +1,6 @@
 
 const pool = require('../services/db')
-
+const geolib = require ('geolib')
 class PriorityQueue {
     queue;
 
@@ -33,19 +33,18 @@ class PriorityQueue {
     getChildren(graph, node) {
         let children;
         if (node in graph) 
-            children = Object.entries(graph[node].children)
-            //console.log(children) 
+            children = Object.entries(graph[node].children) 
             return children
     }
 
     path(start, current) {
         let path = []
         while (current.label != start.label) {
-            path.splice(0, 0, {"name": current.label, "location": current.location})
+            path.splice(0, 0, current.location)
             current = current.parent
         }
-        path.splice(0, 0, {"name": start.label, "location": start.location})
-        console.log(path)
+        path.splice(0, 0, start.location)
+        //console.log(path)
         return path
     }
 }
@@ -73,9 +72,10 @@ class Node {
 
 getRoute =(pathGraph, req)=> {
     const locations = req.body
+    let x = geolib.findNearest({"latitude": locations.start.latitude, "longitude": locations.start.longitude}, Object.values(pathGraph))
     let fringe = new PriorityQueue()
-    let startNode = new Node(locations.start.name, null, {"latitude":locations.start.latitude, "longitude":locations.start.longitude})
-    let goalNode = new Node(locations.goal.name, null, {"latitude":locations.goal.latitude, "longitude":locations.goal.longitude})
+    let startNode = new Node(Object.keys(pathGraph).find(key => pathGraph[key] === x) , null, {"latitude": locations.start.latitude, "longitude": locations.start.longitude})
+    let goalNode = new Node(locations.goal.name, null)
     let visited = []
 
     fringe.enqueue(startNode)
@@ -86,11 +86,9 @@ getRoute =(pathGraph, req)=> {
         if (current.label == goalNode.label){
             return(fringe.path(startNode, current))
         } else {
-            //return fringe.getChildren(pathGraph, current.label)
             fringe.getChildren(pathGraph, current.label).forEach((i)=>{
-                let temp = new Node(i[0], current)
-                temp.g = i[1]
-                temp.location = current.location
+                let temp = new Node(i[0], current, i[1])
+                temp.g = i[1].distance
                 if (!(temp.label in visited)){
                     visited.push(temp.label)
                 }
@@ -118,47 +116,48 @@ exports.getAllDestinations=(req,res) => {
 }
 
 exports.getAllDestinationsWithChildren = (req,res) => {
-    const query = "CALL getAllDestinationDetails()"
-
-    const pathGraph = new Object()
-    pool.query(query,(err,results)=>{
-        if (err){
-            res.json(err)
-            return
-        }
-        results = results[0]
-        let count = 0
-        results.forEach(function(val){
-            const query = `CALL getDestinationChildren(${val['destination_id']})`
-            pool.query(query,(err,row) =>{
-                if (err) {
-                    throw err
-                }else{
-                    let children = new Object()
-                    row[0].forEach((item)=>{
-                        children[item.name] = {"latitude":item.latitude, "longitude": item.longitude, "distance": item.distance}
-                    })
-                    pathGraph[val["name"]] = {"latitude": val.latitude, "longitude": val.longitude, "children": children}
-                }
-                count+=1
-                if (count == results.length) {
-                    const query = "CALL getDestinationHeuristics()";
-                    pool.query(query,(err,results) =>{
-                        var heurist = {}
-                        results[0].forEach((val)=>{
-                            heurist[val['name']] = val['heuristics']    
-                            
+    //console.log(pathGraph);
+    if (Object.entries(pathGraph).length == 0) {
+        const query = "CALL getAllDestinationDetails()"
+        pool.query(query,(err,results)=>{
+            if (err){
+                res.json(err)
+                return
+            }
+            results = results[0]
+            let count = 0
+            results.forEach(function(val){
+                const query = `CALL getDestinationChildren(${val['destination_id']})`
+                pool.query(query,(err,row) =>{
+                    if (err) {
+                        throw err
+                    }else{
+                        let children = new Object()
+                        row[0].forEach((item)=>{
+                            children[item.name] = {"latitude":item.latitude, "longitude": item.longitude, "distance": item.distance}
                         })
-                        pathGraph['heuristics'] = heurist
-                        console.log(pathGraph)
-                        res.status(200)
-                        res.json(getRoute(pathGraph, req))
-                    })
-                    
- 
-                }
-            });
-        });          
-    })
+                        pathGraph[val["name"]] = {"latitude": val.latitude, "longitude": val.longitude, "children": children}
+                    }
+                    count+=1
+                    if (count == results.length) {
+                        const query = "CALL getDestinationHeuristics()";
+                        pool.query(query,(err,results) =>{
+                            var heurist = {}
+                            results[0].forEach((val)=>{
+                                heurist[val['name']] = val['heuristics']    
+                                
+                            })
+                            pathGraph['heuristics'] = heurist
+                            res.status(200)
+                            res.json(getRoute(pathGraph, req))
+                        })
+                        
     
+                    }
+                });
+            });          
+    })} else {
+        res.status(200)
+        res.json(getRoute(pathGraph, req))   
+    }
 };
